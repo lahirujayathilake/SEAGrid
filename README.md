@@ -3,7 +3,7 @@ SMILES
 1.  Checkout this project and create a virtual environment.
 
     ```
-    git clone https://github.com/
+    git clone https://github.com/lahirujayathilake/SEAGrid.git
     cd seagrid
     python3 -m venv venv
     source venv/bin/activate
