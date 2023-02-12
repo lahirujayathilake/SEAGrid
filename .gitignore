@@ -1,0 +1,35 @@
+/dist
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+*.pyc
+*.sqlite3
+settings_local.py
+settings_local*.py
+.DS_Store
+node_modules
+.idea/
+dist/
+ENV
+venv/
+.vscode/
+site/
+.tox/
+yarn-error.log
