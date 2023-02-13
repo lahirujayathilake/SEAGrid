@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+import "DataCatalogAPI.proto";
+
+message ComputationalDataProduct {
+  DataProduct data_product = 1;
+  optional string mw = 2;
+}
+
+message CompDataProductCreateResponse {
+  string comp_data_product_id = 1;
+}
+
+service ComputationalDataAPIService {
+  rpc createComputationalDataProduct(ComputationalDataProduct) returns (CompDataProductCreateResponse){}
+}

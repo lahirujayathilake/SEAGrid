@@ -3,35 +3,36 @@
     <h3>Create Dummy Data</h3>
     <input v-model="dataProductId" type="text" placeholder="Data Product ID">
     <input v-model="dataProductName" type="text" placeholder="Data Product Name">
-    <button @click="createDataProduct">Create Dummy Data</button>
+    <button @click="createComputationalDataProduct">Create Dummy Data</button>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import grpc from '@grpc/grpc-js';
+import { root } from '../ComputationalDataAPI_pb';
 
 export default {
   data() {
     return {
-      dataProductId: "",
-      dataProductName: ""
+      response: ''
     };
   },
   methods: {
-    async createDataProduct() {
-      try {
-        const response = await axios.post("http://127.0.0.1:8000/seagrid-data/create/", JSON.stringify({
-          data_product_id: this.dataProductId,
-          name: this.dataProductName
-        }), {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        });
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-      }
+    async createComputationalDataProduct() {
+      const client = new root.ComputationalDataAPIService(
+        'localhost:50051',
+        grpc.credentials.createInsecure()
+      );
+      const request = new root.ComputationalDataProduct();
+      request.setMw('test data');
+
+      client.createComputationalDataProduct(request, (err, response) => {
+        if (err) {
+          this.response = `Error: ${err}`;
+        } else {
+          this.response = `Response: ${response.getCompDataProductId()}`;
+        }
+      });
     }
   }
 };

@@ -1,11 +1,13 @@
 import json
 
 import grpc
+import concurrent.futures as futures
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 import DataCatalogAPI_pb2
 import DataCatalogAPI_pb2_grpc
+import ComputationalDataAPI_pb2_grpc
 from seagrid_data_product.models import SEAGridDataProduct
 
 
@@ -51,3 +53,17 @@ def create_data_product(data_product, stub):
     create_request.data_product.CopyFrom(data_product)
     create_response = stub.createDataProduct(create_request)
     return create_response.data_product
+
+
+class ComputationalDataAPIServer(ComputationalDataAPI_pb2_grpc.ComputationalDataAPIServiceServicer):
+    @csrf_exempt
+    def createComputationalDataProduct(self, request, context):
+        comp_data_product_id = "some_id"
+        return ComputationalDataAPI_pb2_grpc.CompDataProductCreateResponse(comp_data_product_id=comp_data_product_id)
+
+
+server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+ComputationalDataAPI_pb2_grpc.add_ComputationalDataAPIServiceServicer_to_server(
+    ComputationalDataAPIServer(), server)
+server.add_insecure_port('[::]:50051')
+server.start()
